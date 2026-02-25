@@ -1,11 +1,11 @@
-using AuthServiceIN6BV.Application.Interfaces;
-using AuthServiceIN6BV.Domain.Entities;
+using AuthService_GR.Application.Interfaces;
+using AuthService_GR.Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-namespace AuthServiceIN6BV.Application.Services;
+namespace AuthService_GR.Application.Services;
 
 public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
 {

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace AuthServiceIN6BV.Api.Extensions;
+namespace AuthService_GR.Api.Extensions;
 
 public static class AuthenticationExtensions
 {

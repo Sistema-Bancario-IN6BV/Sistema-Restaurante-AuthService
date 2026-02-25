@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using AuthServiceIN6BV.Application.Interfaces;
+using AuthService_GR.Application.Interfaces;
 
-namespace AuthServiceIN6BV.Application.DTOs;
+namespace AuthService_GR.Application.DTOs;
 public class RegisterDto
 {
     [Required]

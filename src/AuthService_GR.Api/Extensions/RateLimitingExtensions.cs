@@ -1,7 +1,7 @@
 using System;
 using System.Threading.RateLimiting;
 
-namespace AuthServiceIN6BV.Api.Extensions;
+namespace AuthService_GR.Api.Extensions;
 
 public static class RateLimitingExtensions
 {

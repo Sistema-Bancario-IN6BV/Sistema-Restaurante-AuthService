@@ -1,19 +1,17 @@
-using AuthServiceIN6BV.Application.DTOs;
-using AuthServiceIN6BV.Application.Interfaces;
-using AuthServiceIN6BV.Application.Exceptions;
-using AuthServiceIN6BV.Application.Extensions;
-using AuthServiceIN6BV.Application.Validators;
-using AuthServiceIN6BV.Domain.Constants;
-using AuthServiceIN6BV.Domain.Entities;
-using AuthServiceIN6BV.Domain.Interfaces;
-using AuthServiceIN6BV.Domain.Enums;
+using AuthService_GR.Application.DTOs;
+using AuthService_GR.Application.Interfaces;
+using AuthService_GR.Application.Exceptions;
+using AuthService_GR.Application.Extensions;
+using AuthService_GR.Application.Validators;
+using AuthService_GR.Domain.Constants;
+using AuthService_GR.Domain.Entities;
+using AuthService_GR.Domain.Interfaces;
+using AuthService_GR.Domain.Enums;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using AuthServiceIN6BV.Application.DTOs.Email;
-using AuthServiceIN6BV.Aplication.Exceptions;
-
-namespace AuthServiceIN6BV.Application.Services;
-
+using AuthService_GR.Application.DTOs.Email;
+namespace AuthService_GR.Application.Services;
+    
 public class AuthService(
     IUserRepository userRepository,
     IRoleRepository roleRepository,
@@ -78,10 +76,10 @@ public class AuthService(
         var userRoleId = UuidGenerator.GenerateUserId();
 
         // Obtener el rol por defecto (USER_ROLE) ya seedado en DB
-        var defaultRole = await roleRepository.GetByNameAsync(RoleConstants.USER_ROLE);
+        var defaultRole = await roleRepository.GetByNameAsync(RoleConstants.CUSTOMER);
         if (defaultRole == null)
         {
-            throw new InvalidOperationException($"Default role '{RoleConstants.USER_ROLE}' not found. Ensure seeding runs before registration.");
+            throw new InvalidOperationException($"Default role '{RoleConstants.CUSTOMER}' not found. Ensure seeding runs before registration.");
         }
 
         var user = new User
@@ -204,7 +202,7 @@ public class AuthService(
 
     private UserResponseDto MapToUserResponseDto(User user)
     {
-        var userRole = user.UserRoles.FirstOrDefault()?.Role?.Name ?? RoleConstants.USER_ROLE;
+        var userRole = user.UserRoles.FirstOrDefault()?.Role?.Name ?? RoleConstants.CUSTOMER;
         return new UserResponseDto
         {
             Id = user.Id,
@@ -229,7 +227,7 @@ public class AuthService(
             Id = user.Id,
             Username = user.Username,
             ProfilePicture = _cloudinaryService.GetFullImageUrl(user.UserProfile?.ProfilePicture ?? string.Empty),
-            Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? RoleConstants.USER_ROLE
+            Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? RoleConstants.CUSTOMER
         };
     }
 

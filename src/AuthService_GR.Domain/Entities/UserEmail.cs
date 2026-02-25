@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography.X509Certificates;
 
-namespace AuthServiceIN6BV.Domain.Entities;
+namespace AuthService_GR.Domain.Entities;
 public class UserEmail
 {
     [Key]

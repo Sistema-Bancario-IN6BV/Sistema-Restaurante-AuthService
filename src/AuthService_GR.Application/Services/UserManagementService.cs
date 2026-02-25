@@ -1,10 +1,10 @@
-using AuthServiceIN6BV.Application.DTOs;
-using AuthServiceIN6BV.Application.Interfaces;
-using AuthServiceIN6BV.Domain.Constants;
-using AuthServiceIN6BV.Domain.Entities;
-using AuthServiceIN6BV.Domain.Interfaces;
+using AuthService_GR.Application.DTOs;
+using AuthService_GR.Application.Interfaces;
+using AuthService_GR.Domain.Constants;
+using AuthService_GR.Domain.Entities;
+using AuthService_GR.Domain.Interfaces;
 
-namespace AuthServiceIN6BV.Application.Services;
+namespace AuthService_GR.Application.Services;
 
 public class UserManagementService(IUserRepository users, IRoleRepository roles, ICloudinaryService cloudinary) : IUserManagementService
 {
@@ -16,16 +16,16 @@ public class UserManagementService(IUserRepository users, IRoleRepository roles,
         // Validate inputs
         if (string.IsNullOrWhiteSpace(userId)) throw new ArgumentException("Invalid userId", nameof(userId));
         if (!RoleConstants.AllowedRoles.Contains(roleName))
-            throw new InvalidOperationException($"Role not allowed. Use {RoleConstants.ADMIN_ROLE} or {RoleConstants.USER_ROLE}");
+            throw new InvalidOperationException($"Role not allowed. Use {RoleConstants.PLATFORM_ADMIN} or {RoleConstants.RESTAURANT_ADMIN} or {RoleConstants.CUSTOMER}");
 
         // Load user with roles
         var user = await users.GetByIdAsync(userId);
 
         // If demoting an admin, prevent removing last admin
-        var isUserAdmin = user.UserRoles.Any(r => r.Role.Name == RoleConstants.ADMIN_ROLE);
-        if (isUserAdmin && roleName != RoleConstants.ADMIN_ROLE)
+        var isUserAdmin = user.UserRoles.Any(r => r.Role.Name == RoleConstants.RESTAURANT_ADMIN);
+        if (isUserAdmin && roleName != RoleConstants.RESTAURANT_ADMIN)
         {
-            var adminCount = await roles.CountUsersInRoleAsync(RoleConstants.ADMIN_ROLE);
+            var adminCount = await roles.CountUsersInRoleAsync(RoleConstants.RESTAURANT_ADMIN);
 
             if (adminCount <= 1)
             {
@@ -35,7 +35,7 @@ public class UserManagementService(IUserRepository users, IRoleRepository roles,
 
         // Find role entity
         var role = await roles.GetByNameAsync(roleName)
-                       ?? throw new InvalidOperationException($"Role {roleName} not found");
+                    ?? throw new InvalidOperationException($"Role {roleName} not found");
 
         // Update role using repository method
         await users.UpdateUserRoleAsync(userId, role.Id);

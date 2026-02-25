@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AuthServiceIN6BV.Application.DTOs.Email;
+namespace AuthService_GR.Application.DTOs.Email;
 
 public class ForgotPasswordDto
 {

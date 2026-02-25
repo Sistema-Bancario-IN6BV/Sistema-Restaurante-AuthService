@@ -1,10 +1,10 @@
-using AuthServiceIN6BV.Application.Services;
-using AuthServiceIN6BV.Domain.Entities;
-using AuthServiceIN6BV.Domain.Interfaces;
-using AuthServiceIN6BV.Persistance.Data;
+using AuthService_GR.Application.Services;
+using AuthService_GR.Domain.Entities;
+using AuthService_GR.Domain.Interfaces;
+using AuthService_GR.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthServiceIN6BV.Persistance.Repositories;
+namespace AuthService_GR.Persistence.Repositories;
 
 public class UserRepository(ApplicationDbContext context) : IUserRepository
 {

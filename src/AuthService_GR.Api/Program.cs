@@ -1,7 +1,7 @@
-using AuthServiceIN6BV.Persistance.Data;
-using AuthServiceIN6BV.Api.Extensions;
-using AuthServiceIN6BV.Api.Middlewares;
-using AuthServiceIN6BV.Api.ModelBinders;
+using AuthService_GR.Persistence.Data;
+using AuthService_GR.Api.Extensions;
+using AuthService_GR.Api.Middlewares;
+using AuthService_GR.Api.ModelBinders;
 using Serilog;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting.Server.Features;

@@ -1,6 +1,6 @@
-using AuthServiceIN6BV.Application.Interfaces;
+using AuthService_GR.Application.Interfaces;
 
-namespace AuthServiceIN6BV.Api.Models;
+namespace AuthService_GR.Api.Models;
 
 public class FormFileAdapter : IFileData
 {
