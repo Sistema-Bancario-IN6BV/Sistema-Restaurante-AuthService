@@ -1,4 +1,4 @@
-namespace AuthServiceIN6BV.Application.Interfaces;
+namespace AuthService_GR.Application.Interfaces;
 
 public interface ICloudinaryService
 {

@@ -1,7 +1,7 @@
 
 using System.Globalization;
 
-namespace AuthServiceIN6BV.Domain.Constants;
+namespace AuthService_GR.Domain.Constants;
 
 public static class RoleConstants
 {

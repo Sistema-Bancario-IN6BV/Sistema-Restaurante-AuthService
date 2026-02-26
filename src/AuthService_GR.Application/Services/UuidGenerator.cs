@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AuthServiceIN6BV.Application.Services;
+namespace AuthService_GR.Application.Services;
 
 public static class UuidGenerator
 {

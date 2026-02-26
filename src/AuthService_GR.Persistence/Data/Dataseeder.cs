@@ -1,9 +1,9 @@
-using AuthServiceIN6BV.Domain.Entities;
-using AuthServiceIN6BV.Application.Services;
-using AuthServiceIN6BV.Domain.Constants;
+using AuthService_GR.Domain.Entities;
+using AuthService_GR.Application.Services;
+using AuthService_GR.Domain.Constants;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthServiceIN6BV.Persistance.Data;
+namespace AuthService_GR.Persistence.Data;
 
 public static class DataSeeder
 {
@@ -16,13 +16,18 @@ public static class DataSeeder
                 new()
                 {
                     Id = UuidGenerator.GenerateRoleId(),
-                        Name = RoleConstants.ADMIN_ROLE
+                        Name = RoleConstants.RESTAURANT_ADMIN
                 },
                 new()
                 {
                     Id = UuidGenerator.GenerateRoleId(),
-                        Name = RoleConstants.USER_ROLE
-                }
+                        Name = RoleConstants.PLATFORM_ADMIN
+                },
+                new()
+                {
+                    Id = UuidGenerator.GenerateRoleId(),
+                        Name = RoleConstants.CUSTOMER
+                },
             };
 
             await context.Roles.AddRangeAsync(roles);
@@ -31,7 +36,7 @@ public static class DataSeeder
 
         if (!await context.Users.AnyAsync())
         {
-            var adminRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == RoleConstants.ADMIN_ROLE);
+            var adminRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == RoleConstants.PLATFORM_ADMIN);
             if (adminRole != null)
             {
                 var passwordHasher = new PasswordHashService();

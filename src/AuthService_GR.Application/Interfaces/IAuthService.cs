@@ -1,7 +1,7 @@
-using AuthServiceIN6BV.Application.DTOs;
-using AuthServiceIN6BV.Application.DTOs.Email;
+using AuthService_GR.Application.DTOs;
+using AuthService_GR.Application.DTOs.Email;
 
-namespace AuthServiceIN6BV.Application.Interfaces;
+namespace AuthService_GR.Application.Interfaces;
 
 public interface IAuthService
 {

@@ -1,10 +1,10 @@
-using AuthServiceIN6BV.Domain.Entities;
+using AuthService_GR.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
-namespace AuthServiceIN6BV.Persistance.Data;
+namespace AuthService_GR.Persistence.Data;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

@@ -1,5 +1,5 @@
 
-namespace AuthServiceIN6BV.Domain.Enums;
+namespace AuthService_GR.Domain.Enums;
 
 public enum UserRole
 {

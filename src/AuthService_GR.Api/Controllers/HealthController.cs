@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace AuthServiceIN6BV.Api.Controllers;
+namespace AuthService_GR.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]

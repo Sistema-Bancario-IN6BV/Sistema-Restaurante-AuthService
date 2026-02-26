@@ -1,6 +1,6 @@
 using System.Security.Cryptography;
 
-namespace AuthServiceIN6BV.Aplication.Exceptions;
+namespace AuthService_GR.Application.Exceptions;
 
 public static class ErrorCodes
 {

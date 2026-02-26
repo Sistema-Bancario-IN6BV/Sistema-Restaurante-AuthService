@@ -1,14 +1,13 @@
-using AuthServiceIN6BV.Application.Interfaces;
-using AuthServiceIN6BV.Application.Services;
-using AuthServiceIN6BV.Domain.Interfaces;
-using AuthServiceIN6BV.Persistance.Repositories;
-using AuthServiceIN6BV.Persistance.Data;
+using AuthService_GR.Application.Interfaces;
+using AuthService_GR.Application.Services;
+using AuthService_GR.Domain.Interfaces;
+using AuthService_GR.Persistence.Repositories;
+using AuthService_GR.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace AuthServiceIN6BV.Api.Extensions;
-
-public static class ServiceColectionExtensions
+namespace AuthService_GR.Api.Extensions;
+public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddApplicationSerivces(this IServiceCollection services, IConfiguration configuration)
     {

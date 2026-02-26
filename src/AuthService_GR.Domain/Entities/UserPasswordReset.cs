@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AuthServiceIN6BV.Domain.Entities;
+namespace AuthService_GR.Domain.Entities;
 
 public class UserPasswordReset
 {

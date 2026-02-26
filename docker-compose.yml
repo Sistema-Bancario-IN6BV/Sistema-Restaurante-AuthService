@@ -3,14 +3,14 @@ version: "3.9"
 services:
   postgres:
     image: postgres:16
-    container_name: AuthServiceIN6BV_postgres
+    container_name: AuthServiceRestauran_postgres
     restart: always
     environment:
       POSTGRES_DB: AuthService_Restaurantes
       POSTGRES_USER: root
       POSTGRES_PASSWORD: admin
     ports:
-      - "5438:5432"
+      - "5441:5432"
     volumes:
       - postgres_data:/var/lib/postgressql/data 
 

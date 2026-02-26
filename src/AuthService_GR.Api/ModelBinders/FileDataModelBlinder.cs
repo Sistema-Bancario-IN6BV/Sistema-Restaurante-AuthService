@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
-using AuthServiceIN6BV.Api.Models;
-using AuthServiceIN6BV.Application.Interfaces;
+using AuthService_GR.Api.Models;
+using AuthService_GR.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace AuthServiceIN6BV.Api.ModelBinders;
+namespace AuthService_GR.Api.ModelBinders;
 
 public class FileDataModelBinder : IModelBinder
 {

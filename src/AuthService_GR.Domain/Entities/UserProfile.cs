@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-namespace AuthServiceIN6BV.Domain.Entities;
+namespace AuthService_GR.Domain.Entities;
 
 
 public class UserProfile{

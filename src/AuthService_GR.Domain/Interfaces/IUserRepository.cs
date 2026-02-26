@@ -1,7 +1,7 @@
 
-using AuthServiceIN6BV.Domain.Entities;
+using AuthService_GR.Domain.Entities;
 
-namespace AuthServiceIN6BV.Domain.Interfaces;
+namespace AuthService_GR.Domain.Interfaces;
 
 public interface IUserRepository
 {

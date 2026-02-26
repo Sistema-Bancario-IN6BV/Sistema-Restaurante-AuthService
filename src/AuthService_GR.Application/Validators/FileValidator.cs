@@ -1,7 +1,7 @@
 using System.Data;
-using AuthServiceIN6BV.Application.Interfaces;
+using AuthService_GR.Application.Interfaces;
 
-namespace AuthServiceIN6BV.Application.Validators;
+namespace AuthService_GR.Application.Validators;
 
 public static class FileValidator
 {

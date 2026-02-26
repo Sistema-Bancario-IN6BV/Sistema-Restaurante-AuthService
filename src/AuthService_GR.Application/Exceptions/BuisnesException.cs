@@ -1,4 +1,4 @@
-namespace AuthServiceIN6BV.Application.Exceptions;
+namespace AuthService_GR.Application.Exceptions;
 
 public class BusinessException : Exception
 {

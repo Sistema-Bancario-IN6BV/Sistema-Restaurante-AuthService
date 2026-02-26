@@ -1,12 +1,12 @@
 using System;
-using AuthServiceIN6BV.Application.DTOs;
-using AuthServiceIN6BV.Application.DTOs.Email;
-using AuthServiceIN6BV.Application.Interfaces;
+using AuthService_GR.Application.DTOs;
+using AuthService_GR.Application.DTOs.Email;
+using AuthService_GR.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
-namespace AuthServiceIN6BV.Api.Controllers;
+namespace AuthService_GR.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]

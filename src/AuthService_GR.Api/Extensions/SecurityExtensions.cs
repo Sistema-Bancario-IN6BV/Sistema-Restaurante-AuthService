@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.DataProtection;
 
-namespace AuthServiceIN6BV.Api.Extensions;
+namespace AuthService_GR.Api.Extensions;
 
 public static class SecurityExtensions
 {

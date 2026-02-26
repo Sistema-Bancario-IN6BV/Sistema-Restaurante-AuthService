@@ -1,6 +1,6 @@
-using AuthServiceIN6BV.Application.DTOs;
+using AuthService_GR.Application.DTOs;
 
-namespace AuthServiceIN6BV.Application.Interfaces;
+namespace AuthService_GR.Application.Interfaces;
 
 public interface IUserManagementService
 {

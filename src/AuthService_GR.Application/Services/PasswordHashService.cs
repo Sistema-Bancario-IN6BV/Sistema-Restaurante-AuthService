@@ -1,10 +1,10 @@
-using AuthServiceIN6BV.Application.Interfaces;
+using AuthService_GR.Application.Interfaces;
 using Konscious.Security.Cryptography;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace AuthServiceIN6BV.Application.Services;
+namespace AuthService_GR.Application.Services;
 
 public class PasswordHashService : IPasswordHashService
 {

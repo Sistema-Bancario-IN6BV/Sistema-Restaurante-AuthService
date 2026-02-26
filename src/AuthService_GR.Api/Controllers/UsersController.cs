@@ -1,11 +1,11 @@
-using AuthServiceIN6BV.Application.DTOs;
-using AuthServiceIN6BV.Application.Interfaces;
-using AuthServiceIN6BV.Domain.Constants;
+using AuthService_GR.Application.DTOs;
+using AuthService_GR.Application.Interfaces;
+using AuthService_GR.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
-namespace AuthServiceIN6BV.Api.Controllers;
+namespace AuthService_GR.Api.Controllers;
 
 [ApiController]
 [Route("api/v1/[controller]")]
@@ -16,7 +16,7 @@ public class UsersController(IUserManagementService userManagementService) : Con
         var userId = User.Claims.FirstOrDefault(c => c.Type == "sub" || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
         if (string.IsNullOrEmpty(userId)) return false;
         var roles = await userManagementService.GetUserRolesAsync(userId);
-        return roles.Contains(RoleConstants.ADMIN_ROLE);
+        return roles.Contains(RoleConstants.PLATFORM_ADMIN);
     }
 
     [HttpPut("{userId}/role")]

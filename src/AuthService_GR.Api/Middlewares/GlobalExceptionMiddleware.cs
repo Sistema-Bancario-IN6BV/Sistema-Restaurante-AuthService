@@ -1,9 +1,9 @@
 using System.Net;
 using System.Text.Json;
-using AuthServiceIN6BV.Api.Models;
-using AuthServiceIN6BV.Application.Exceptions;
+using AuthService_GR.Api.Models;
+using AuthService_GR.Application.Exceptions;
 
-namespace AuthServiceIN6BV.Api.Middlewares;
+namespace AuthService_GR.Api.Middlewares;
 
 public class GlobalExceptionMiddleware(RequestDelegate next, ILogger<GlobalExceptionMiddleware> logger)
 {

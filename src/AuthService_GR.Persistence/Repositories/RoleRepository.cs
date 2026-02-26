@@ -1,9 +1,9 @@
-using AuthServiceIN6BV.Domain.Entities;
-using AuthServiceIN6BV.Domain.Interfaces;
-using AuthServiceIN6BV.Persistance.Data;
+using AuthService_GR.Domain.Entities;
+using AuthService_GR.Domain.Interfaces;
+using AuthService_GR.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthServiceIN6BV.Persistance.Repositories;
+namespace AuthService_GR.Persistence.Repositories;
 
 public class RoleRepository(ApplicationDbContext context) : IRoleRepository
 {
