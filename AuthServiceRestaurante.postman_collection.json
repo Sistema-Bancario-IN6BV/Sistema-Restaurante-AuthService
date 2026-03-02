@@ -1,0 +1,365 @@
+{
+  "info": {
+    "_postman_id": "83936695-5738-43fe-98b1-32290731a6fb",
+    "name": "AuthServiceRestaurante",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "48271620",
+    "_collection_link": "https://go.postman.co/collection/48271620-83936695-5738-43fe-98b1-32290731a6fb?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication Service (.NET)",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:5127/api/v1/health",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5127",
+              "path": [
+                "api",
+                "v1",
+                "health"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.json().token) {",
+                  "    pm.environment.set('authToken', pm.response.json().token);",
+                  "    pm.environment.set('userId', pm.response.json().user.id);",
+                  "    pm.environment.set('userEmail', pm.response.json().user.email);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "name",
+                  "value": "Frank Steve",
+                  "type": "text"
+                },
+                {
+                  "key": "surname",
+                  "value": "Paiz Diaz",
+                  "type": "text"
+                },
+                {
+                  "key": "username",
+                  "value": "fdiaz",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "holamundo",
+                  "type": "text"
+                },
+                {
+                  "key": "phone",
+                  "value": "41430307",
+                  "type": "text"
+                },
+                {
+                  "key": "profilePicture",
+                  "type": "file",
+                  "src": "/C:/Users/stevp/Downloads/ChatGPT Image 14 feb 2026, 22_26_16.png"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:5127/api/v1/auth/register",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5127",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.json().token) {",
+                  "    pm.environment.set('authToken', pm.response.json().token);",
+                  "    pm.environment.set('userId', pm.response.json().userDetails.id);",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"emailOrUsername\": \"admin@ksports.local\",\n    \"password\": \"Admin1234!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5105/api/v1/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5105",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify Email",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"Z8uhlWz4YHvgYOGUXpOO1dCMZ4GLlbb7UItL6fkXnTA\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5127/api/v1/auth/verify-email",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5127",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "verify-email"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Resend Verification",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"stev.paiz07@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost::5105/api/v1/auth/resend-verification",
+              "protocol": "http",
+              "host": [
+                "localhost:"
+              ],
+              "port": "5105",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "resend-verification"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Forgot Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"email\": \"stev.paiz07@gmail.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:5127/api/v1/auth/forgot-password",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "5127",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "forgot-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Reset Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token\": \"{{passwordResetToken}}\",\n    \"newPassword\": \"\"\n}"
+            },
+            "url": {
+              "raw": "{{authDotNetUrl}}/api/v1/auth/reset-password",
+              "host": [
+                "{{authDotNetUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "reset-password"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfUGdRRjd3ZGMyVHU3IiwianRpIjoiYjc5ZWYwMGEtZThhNi00NjMwLWE3N2UtNmI2MjJiMWY0NzExIiwiaWF0IjoxNzY0MTA3NTcxLCJyb2xlIjoiVVNFUl9ST0xFIiwiZXhwIjoxNzY0MTA5MzcxLCJpc3MiOiJBdXRoU2VydmljZSIsImF1ZCI6IkF1dGhTZXJ2aWNlIn0.u9XljRE9bFKA-2bX22riOjBmljvgQRlTpFR-3_rEq5Q",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{authDotNetUrl}}/api/v1/auth/profile",
+              "host": [
+                "{{authDotNetUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change Role",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c3JfZDVFTjJ3eHlacWZFIiwianRpIjoiNmMwM2IwNGYtNTFmOS00MjczLThlYWEtNjU5ODBhODUwZWRlIiwiaWF0IjoxNzYzNTYwNjk3LCJleHAiOjE3NjM1NjI0OTcsImlzcyI6IkF1dGhTZXJ2aWNlIiwiYXVkIjoiQXV0aFNlcnZpY2UifQ.PXQkRbRx50gUKURwz1VfgDieLpN1-ZR9OQoy73RbFkQ",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{authToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"roleName\":\"USER_ROLE\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{authDotNetUrl}}/api/v1/users/usr_GgZ85QbWCdNc/role",
+              "host": [
+                "{{authDotNetUrl}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                "usr_GgZ85QbWCdNc",
+                "role"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
