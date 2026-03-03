@@ -1,0 +1,888 @@
+<!-- 
+  AuthService API - Documentación HTML Completa para Swagger
+  
+  Esta es una guía de referencia rápida para todos los endpoints disponibles
+  en la API de Autenticación de KinalSports.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuthService API - Documentación Completa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .endpoint h3 {
+            color: #333;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85em;
+            color: white;
+        }
+        
+        .method.get {
+            background: #61affe;
+        }
+        
+        .method.post {
+            background: #49cc90;
+        }
+        
+        .method.put {
+            background: #fca130;
+        }
+        
+        .method.delete {
+            background: #ff6c74;
+        }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .response {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        
+        .status-code {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin: 5px 5px 5px 0;
+            font-size: 0.85em;
+            color: white;
+        }
+        
+        .status-200 { background: #49cc90; }
+        .status-201 { background: #49cc90; }
+        .status-400 { background: #fca130; }
+        .status-401 { background: #f93e3e; }
+        .status-403 { background: #f93e3e; }
+        .status-404 { background: #fca130; }
+        .status-429 { background: #fca130; }
+        .status-503 { background: #f93e3e; }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+        
+        .toc h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        
+        .toc ul {
+            list-style: none;
+        }
+        
+        .toc li {
+            padding: 5px 0;
+        }
+        
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .toc a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 AuthService API</h1>
+            <p>Documentación Completa de la API de Autenticación - KinalSports</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Versión 1.0.0 | Última actualización: 3 de Marzo de 2024</p>
+        </header>
+        
+        <div class="content">
+            <div class="toc">
+                <h3>📖 Tabla de Contenidos</h3>
+                <ul>
+                    <li><a href="#introduccion">Introducción</a></li>
+                    <li><a href="#autenticacion">Autenticación</a></li>
+                    <li><a href="#endpoints-auth">Endpoints de Autenticación</a></li>
+                    <li><a href="#endpoints-users">Endpoints de Usuarios</a></li>
+                    <li><a href="#endpoints-health">Health Check</a></li>
+                    <li><a href="#codigos-http">Códigos HTTP</a></li>
+                    <li><a href="#flujos">Flujos de Trabajo</a></li>
+                    <li><a href="#ejemplos">Ejemplos de Uso</a></li>
+                </ul>
+            </div>
+            
+            <!-- INTRODUCCIÓN -->
+            <section class="section" id="introduccion">
+                <h2>🚀 Introducción</h2>
+                <p>
+                    AuthService es el servicio centralizado de autenticación y gestión de usuarios de la plataforma KinalSports.
+                    Proporciona un conjunto completo de herramientas para registrar usuarios, autenticarlos, verificar emails
+                    y gestionar roles y permisos.
+                </p>
+                
+                <div class="success-box">
+                    <strong>✓ Características Principales:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>Registro e autenticación de usuarios</li>
+                        <li>Verificación de email</li>
+                        <li>Recuperación de contraseña</li>
+                        <li>Gestión de roles y permisos</li>
+                        <li>JWT Token Bearer</li>
+                        <li>Rate Limiting por IP</li>
+                        <li>Headers de seguridad</li>
+                    </ul>
+                </div>
+            </section>
+            
+            <!-- AUTENTICACIÓN -->
+            <section class="section" id="autenticacion">
+                <h2>🔐 Autenticación</h2>
+                <p>
+                    La mayoría de los endpoints requieren autenticación mediante JWT Bearer Token.
+                </p>
+                
+                <h4>Obtener un Token:</h4>
+                <ol>
+                    <li>Registra un nuevo usuario: <code>POST /api/v1/auth/register</code></li>
+                    <li>Verifica tu email: <code>POST /api/v1/auth/verify-email</code></li>
+                    <li>Inicia sesión: <code>POST /api/v1/auth/login</code></li>
+                    <li>Copia el token de la respuesta</li>
+                </ol>
+                
+                <h4>Usar el Token en Swagger:</h4>
+                <ol>
+                    <li>Haz clic en el botón "Authorize" (esquina superior derecha)</li>
+                    <li>Selecciona "Bearer"</li>
+                    <li>Pega tu token JWT</li>
+                    <li>Haz clic en "Authorize"</li>
+                </ol>
+                
+                <h4>O incluye manualmente:</h4>
+                <div class="response">Authorization: Bearer {tu_token_aqui}</div>
+            </section>
+            
+            <!-- ENDPOINTS DE AUTENTICACIÓN -->
+            <section class="section" id="endpoints-auth">
+                <h2>🔑 Endpoints de Autenticación</h2>
+                
+                <!-- POST Register -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        Registrar Usuario
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/register</div>
+                    <p><strong>Descripción:</strong> Registra un nuevo usuario en el sistema.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    <p><strong>Rate Limit:</strong> 5/minuto</p>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-201">201 Created</span>
+                        <span class="status-code status-400">400 Bad Request</span>
+                        <span class="status-code status-409">409 Conflict</span>
+                        <span class="status-code status-503">503 Service Unavailable</span>
+                    </div>
+                </div>
+                
+                <!-- POST Login -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        Iniciar Sesión
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/login</div>
+                    <p><strong>Descripción:</strong> Autentica un usuario y retorna un JWT token.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    <p><strong>Rate Limit:</strong> 5/minuto</p>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-400">400 Bad Request</span>
+                        <span class="status-code status-403">403 Forbidden</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                    </div>
+                    
+                    <p><strong>Ejemplo de Respuesta (200):</strong></p>
+                    <div class="response">
+{
+  "success": true,
+  "message": "Autenticación exitosa",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "userDetails": {
+    "id": "550e8400-e29b-41d4-a716-446655440000",
+    "username": "john_doe",
+    "profilePicture": "https://...",
+    "role": "USER"
+  },
+  "expiresAt": "2024-03-02T10:30:00Z"
+}
+                    </div>
+                </div>
+                
+                <!-- POST Verify Email -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        Verificar Email
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/verify-email</div>
+                    <p><strong>Descripción:</strong> Verifica la dirección de email del usuario.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    <p><strong>Rate Limit:</strong> 30/minuto</p>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-400">400 Bad Request</span>
+                        <span class="status-code status-404">404 Not Found</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                    </div>
+                </div>
+                
+                <!-- POST Resend Verification -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        Reenviar Email de Verificación
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/resend-verification</div>
+                    <p><strong>Descripción:</strong> Reenvía el email de verificación a la dirección registrada.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    <p><strong>Rate Limit:</strong> 5/minuto</p>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-400">400 Bad Request</span>
+                        <span class="status-code status-404">404 Not Found</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                        <span class="status-code status-503">503 Service Unavailable</span>
+                    </div>
+                </div>
+                
+                <!-- POST Forgot Password -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        Olvidé mi Contraseña
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/forgot-password</div>
+                    <p><strong>Descripción:</strong> Inicia el proceso de recuperación de contraseña.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    <p><strong>Rate Limit:</strong> 5/minuto</p>
+                    
+                    <div class="warning-box">
+                        <strong>⚠️ Nota de Seguridad:</strong> Este endpoint siempre retorna éxito, incluso si el email no existe,
+                        para evitar enumerar de usuarios válidos.
+                    </div>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                        <span class="status-code status-503">503 Service Unavailable</span>
+                    </div>
+                </div>
+                
+                <!-- POST Reset Password -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method post">POST</span>
+                        Restaurar Contraseña
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/reset-password</div>
+                    <p><strong>Descripción:</strong> Restablece la contraseña usando un token válido.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    <p><strong>Rate Limit:</strong> 5/minuto</p>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-400">400 Bad Request</span>
+                        <span class="status-code status-404">404 Not Found</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                    </div>
+                </div>
+                
+                <!-- GET Profile -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method get">GET</span>
+                        Obtener Perfil
+                    </h3>
+                    <div class="endpoint-path">/api/v1/auth/profile</div>
+                    <p><strong>Descripción:</strong> Obtiene el perfil del usuario autenticado.</p>
+                    <p><strong>Autenticación:</strong> ✓ Requerida (Bearer Token)</p>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-401">401 Unauthorized</span>
+                        <span class="status-code status-404">404 Not Found</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ENDPOINTS DE USUARIOS -->
+            <section class="section" id="endpoints-users">
+                <h2>👥 Endpoints de Gestión de Usuarios</h2>
+                
+                <!-- GET User Roles -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method get">GET</span>
+                        Obtener Roles de Usuario
+                    </h3>
+                    <div class="endpoint-path">/api/v1/users/{userId}/roles</div>
+                    <p><strong>Descripción:</strong> Obtiene todos los roles asignados a un usuario.</p>
+                    <p><strong>Autenticación:</strong> ✓ Requerida (Bearer Token)</p>
+                    
+                    <p><strong>Parámetros:</strong></p>
+                    <table>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Ubicación</th>
+                            <th>Tipo</th>
+                            <th>Requerido</th>
+                            <th>Descripción</th>
+                        </tr>
+                        <tr>
+                            <td>userId</td>
+                            <td>Path</td>
+                            <td>string</td>
+                            <td>Sí</td>
+                            <td>ID del usuario</td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-401">401 Unauthorized</span>
+                        <span class="status-code status-404">404 Not Found</span>
+                    </div>
+                </div>
+                
+                <!-- PUT Update User Role -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method put">PUT</span>
+                        Actualizar Rol de Usuario
+                    </h3>
+                    <div class="endpoint-path">/api/v1/users/{userId}/role</div>
+                    <p><strong>Descripción:</strong> Actualiza el rol de un usuario (solo para administradores).</p>
+                    <p><strong>Autenticación:</strong> ✓ Requerida (Bearer Token - Admin)</p>
+                    <p><strong>Rate Limit:</strong> 30/minuto</p>
+                    
+                    <p><strong>Parámetros:</strong></p>
+                    <table>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Ubicación</th>
+                            <th>Tipo</th>
+                            <th>Requerido</th>
+                            <th>Descripción</th>
+                        </tr>
+                        <tr>
+                            <td>userId</td>
+                            <td>Path</td>
+                            <td>string</td>
+                            <td>Sí</td>
+                            <td>ID del usuario a actualizar</td>
+                        </tr>
+                        <tr>
+                            <td>roleName</td>
+                            <td>Body</td>
+                            <td>string</td>
+                            <td>Sí</td>
+                            <td>USER, MODERATOR, PLATFORM_ADMIN</td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-401">401 Unauthorized</span>
+                        <span class="status-code status-403">403 Forbidden</span>
+                        <span class="status-code status-404">404 Not Found</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                    </div>
+                </div>
+                
+                <!-- GET Users by Role -->
+                <div class="endpoint">
+                    <h3>
+                        <span class="method get">GET</span>
+                        Obtener Usuarios por Rol
+                    </h3>
+                    <div class="endpoint-path">/api/v1/users/by-role/{roleName}</div>
+                    <p><strong>Descripción:</strong> Obtiene todos los usuarios que tienen un rol específico (solo para administradores).</p>
+                    <p><strong>Autenticación:</strong> ✓ Requerida (Bearer Token - Admin)</p>
+                    <p><strong>Rate Limit:</strong> 30/minuto</p>
+                    
+                    <p><strong>Parámetros:</strong></p>
+                    <table>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Ubicación</th>
+                            <th>Tipo</th>
+                            <th>Requerido</th>
+                            <th>Descripción</th>
+                        </tr>
+                        <tr>
+                            <td>roleName</td>
+                            <td>Path</td>
+                            <td>string</td>
+                            <td>Sí</td>
+                            <td>USER, MODERATOR, PLATFORM_ADMIN</td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>Códigos de Respuesta:</strong></p>
+                    <div>
+                        <span class="status-code status-200">200 OK</span>
+                        <span class="status-code status-401">401 Unauthorized</span>
+                        <span class="status-code status-403">403 Forbidden</span>
+                        <span class="status-code status-429">429 Too Many Requests</span>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- HEALTH CHECK -->
+            <section class="section" id="endpoints-health">
+                <h2>❤️ Health Check</h2>
+                
+                <div class="endpoint">
+                    <h3>
+                        <span class="method get">GET</span>
+                        Estado del Servicio
+                    </h3>
+                    <div class="endpoint-path">/api/v1/health</div>
+                    <p><strong>Descripción:</strong> Verifica el estado de operación del servicio de autenticación.</p>
+                    <p><strong>Autenticación:</strong> No requerida</p>
+                    
+                    <p><strong>Ejemplo de Respuesta (200):</strong></p>
+                    <div class="response">
+{
+  "status": "Healthy",
+  "timestamp": "2024-03-03T10:30:00.000Z",
+  "service": "KinalSports Authentication Service"
+}
+                    </div>
+                </div>
+            </section>
+            
+            <!-- CÓDIGOS HTTP -->
+            <section class="section" id="codigos-http">
+                <h2>📊 Códigos de Respuesta HTTP</h2>
+                
+                <table>
+                    <tr>
+                        <th>Código</th>
+                        <th>Estado</th>
+                        <th>Descripción</th>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-200">200</span></td>
+                        <td>OK</td>
+                        <td>Solicitud exitosa</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-201">201</span></td>
+                        <td>Created</td>
+                        <td>Recurso creado exitosamente (registro)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-400">400</span></td>
+                        <td>Bad Request</td>
+                        <td>Datos inválidos o incompletos</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-401">401</span></td>
+                        <td>Unauthorized</td>
+                        <td>No autenticado o token inválido/expirado</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-403">403</span></td>
+                        <td>Forbidden</td>
+                        <td>Autenticado pero sin permisos suficientes</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-404">404</span></td>
+                        <td>Not Found</td>
+                        <td>Recurso no encontrado</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-429">429</span></td>
+                        <td>Too Many Requests</td>
+                        <td>Límite de tasa excedido. Intenta más tarde.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="status-code status-503">503</span></td>
+                        <td>Service Unavailable</td>
+                        <td>Error al enviar email u otro servicio externo</td>
+                    </tr>
+                </table>
+            </section>
+            
+            <!-- FLUJOS DE TRABAJO -->
+            <section class="section" id="flujos">
+                <h2>🔄 Flujos de Trabajo Comunes</h2>
+                
+                <h3>Flujo de Registro e Autenticación</h3>
+                <ol>
+                    <li><strong>Registrar usuario:</strong> <code>POST /api/v1/auth/register</code>
+                        <p>Envía nombre, apellido, usuario, email, contraseña, teléfono</p>
+                    </li>
+                    <li><strong>Recibir email de verificación:</strong> El usuario recibe un email con token
+                        <p>El usuario debe hacer clic en el enlace o copiar el token</p>
+                    </li>
+                    <li><strong>Verificar email:</strong> <code>POST /api/v1/auth/verify-email</code>
+                        <p>Envía el token de verificación</p>
+                    </li>
+                    <li><strong>Iniciar sesión:</strong> <code>POST /api/v1/auth/login</code>
+                        <p>Obtén el JWT token</p>
+                    </li>
+                    <li><strong>Usar token:</strong> Incluye el token en el header <code>Authorization: Bearer {token}</code></li>
+                </ol>
+                
+                <h3>Flujo de Recuperación de Contraseña</h3>
+                <ol>
+                    <li><strong>Solicitar recuperación:</strong> <code>POST /api/v1/auth/forgot-password</code>
+                        <p>Envía el email de la cuenta</p>
+                    </li>
+                    <li><strong>Recibir email:</strong> Usuario recibe email con token de recuperación</li>
+                    <li><strong>Restaurar contraseña:</strong> <code>POST /api/v1/auth/reset-password</code>
+                        <p>Envía el token y la nueva contraseña</p>
+                    </li>
+                    <li><strong>Iniciar sesión:</strong> Login con la nueva contraseña</li>
+                </ol>
+                
+                <h3>Flujo de Verificación de Email (reenvío)</h3>
+                <ol>
+                    <li><strong>El usuario no recibió el email:</strong> <code>POST /api/v1/auth/resend-verification</code></li>
+                    <li><strong>Recibe nuevo email:</strong> Con nuevo token (más reciente)</li>
+                    <li><strong>Verificar:</strong> <code>POST /api/v1/auth/verify-email</code> con el nuevo token</li>
+                </ol>
+            </section>
+            
+            <!-- EJEMPLOS DE USO -->
+            <section class="section" id="ejemplos">
+                <h2>💻 Ejemplos de Uso</h2>
+                
+                <h3>Con cURL</h3>
+                
+                <h4>Registro:</h4>
+                <div class="response">
+curl -X POST "http://localhost:5000/api/v1/auth/register" \
+  -H "Content-Type: multipart/form-data" \
+  -F "name=John" \
+  -F "surname=Doe" \
+  -F "username=john_doe" \
+  -F "email=john@example.com" \
+  -F "password=MySecurePass123" \
+  -F "phone=12345678"
+                </div>
+                
+                <h4>Login:</h4>
+                <div class="response">
+curl -X POST "http://localhost:5000/api/v1/auth/login" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "emailOrUsername": "john@example.com",
+    "password": "MySecurePass123"
+  }'
+                </div>
+                
+                <h4>Obtener Perfil (con token):</h4>
+                <div class="response">
+curl -X GET "http://localhost:5000/api/v1/auth/profile" \
+  -H "Authorization: Bearer {tu_token_aqui}"
+                </div>
+                
+                <h3>Con JavaScript/Fetch</h3>
+                <div class="response">
+// Login
+const response = await fetch('http://localhost:5000/api/v1/auth/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    emailOrUsername: 'john@example.com',
+    password: 'MySecurePass123'
+  })
+});
+
+const data = await response.json();
+const token = data.token;
+
+// Usar el token
+const profileResponse = await fetch('http://localhost:5000/api/v1/auth/profile', {
+  headers: { 'Authorization': `Bearer ${token}` }
+});
+                </div>
+                
+                <h3>Con Python/Requests</h3>
+                <div class="response">
+import requests
+
+# Login
+response = requests.post(
+    'http://localhost:5000/api/v1/auth/login',
+    json={
+        'emailOrUsername': 'john@example.com',
+        'password': 'MySecurePass123'
+    }
+)
+
+token = response.json()['token']
+
+# Usar el token
+profile = requests.get(
+    'http://localhost:5000/api/v1/auth/profile',
+    headers={'Authorization': f'Bearer {token}'}
+)
+                </div>
+            </section>
+            
+            <!-- INFORMACIÓN ADICIONAL -->
+            <section class="section">
+                <h2>ℹ️ Información Adicional</h2>
+                
+                <h3>Roles Disponibles</h3>
+                <table>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Descripción</th>
+                        <th>Permisos Especiales</th>
+                    </tr>
+                    <tr>
+                        <td>USER</td>
+                        <td>Usuario estándar</td>
+                        <td>Acceso básico a la plataforma</td>
+                    </tr>
+                    <tr>
+                        <td>MODERATOR</td>
+                        <td>Usuario con permisos de moderación</td>
+                        <td>Puede moderar contenido de usuarios</td>
+                    </tr>
+                    <tr>
+                        <td>PLATFORM_ADMIN</td>
+                        <td>Administrador de plataforma</td>
+                        <td>Acceso total a funciones administrativas</td>
+                    </tr>
+                </table>
+                
+                <h3>Validaciones de Campos</h3>
+                <table>
+                    <tr>
+                        <th>Campo</th>
+                        <th>Validación</th>
+                    </tr>
+                    <tr>
+                        <td>Contraseña</td>
+                        <td>Mínimo 8 caracteres</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>Debe ser un email válido y único</td>
+                    </tr>
+                    <tr>
+                        <td>Usuario</td>
+                        <td>Debe ser único, sin espacios</td>
+                    </tr>
+                    <tr>
+                        <td>Teléfono</td>
+                        <td>Exactamente 8 caracteres</td>
+                    </tr>
+                    <tr>
+                        <td>Nombre/Apellido</td>
+                        <td>Máximo 25 caracteres cada uno</td>
+                    </tr>
+                </table>
+                
+                <h3>Rate Limiting</h3>
+                <div class="info-box">
+                    <strong>ℹ️ Límites de Tasa por IP:</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li><strong>AuthPolicy:</strong> 5 solicitudes por minuto (endpoints de autenticación)</li>
+                        <li><strong>ApiPolicy:</strong> 30 solicitudes por minuto (otros endpoints protegidos)</li>
+                        <li>Si excedes los límites, recibirás un error 429</li>
+                    </ul>
+                </div>
+                
+                <h3>Notas Importantes</h3>
+                <div class="warning-box">
+                    <ul style="margin: 10px 0 10px 20px;">
+                        <li>Los tokens JWT expiran después de 24 horas</li>
+                        <li>Las contraseñas nunca se devuelven en las respuestas</li>
+                        <li>El email debe verificarse antes de ciertos endpoints</li>
+                        <li>El endpoint forgot-password siempre retorna éxito por seguridad</li>
+                        <li>Los archivos de imagen se suben a Cloudinary</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p>📚 Documentación de AuthService API | Versión 1.0.0</p>
+            <p>Para soporte, contacta al equipo de desarrollo de KinalSports</p>
+            <p style="margin-top: 10px; opacity: 0.8;">Última actualización: 3 de Marzo de 2024</p>
+        </footer>
+    </div>
+</body>
+</html>
