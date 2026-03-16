@@ -4,7 +4,9 @@ using AuthService_GR.Domain.Interfaces;
 using AuthService_GR.Persistence.Repositories;
 using AuthService_GR.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace AuthService_GR.Api.Extensions;
 public static class ServiceCollectionExtensions
@@ -52,13 +54,12 @@ public static class ServiceCollectionExtensions
                 }
             });
 
-            // Agregar soporte para parámetros de autorización Bearer Token
             options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
                 Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
                 Scheme = "bearer",
                 BearerFormat = "JWT",
-                Description = "Ingresa un JWT Token válido para acceder a endpoints protegidos.\n\nFormato: Bearer {token}"
+                Description = "Ingresa un JWT Token válido para acceder a endpoints protegidos.\\n\\nFormato: Bearer {token}"
             });
 
             options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
@@ -76,16 +77,9 @@ public static class ServiceCollectionExtensions
                 }
             });
 
-            // Incluir comentarios XML
-            var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            if (File.Exists(xmlPath))
-            {
-                options.IncludeXmlComments(xmlPath);
-            }
-
-            // Configurar ejemplos de respuestas
-            options.EnableAnnotations();
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+            options.IncludeXmlComments(xmlPath, true);
         });
 
         return services;
