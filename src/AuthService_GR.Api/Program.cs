@@ -35,7 +35,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService API v1.0");
+        options.RoutePrefix = string.Empty; // Mostrar Swagger en raíz (/)
+        options.DisplayOperationId();
+        options.DefaultModelsExpandDepth(2);
+        options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
+        options.EnableFilter();
+        options.ShowCommonExtensions();
+    });
 }
 
 // Add Serilog request logging
