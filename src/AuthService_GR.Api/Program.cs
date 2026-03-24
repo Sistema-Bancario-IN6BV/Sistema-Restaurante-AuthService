@@ -38,7 +38,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService API v1.0");
-        options.RoutePrefix = string.Empty; // Mostrar Swagger en raíz (/)
+        options.RoutePrefix = string.Empty;
         options.DisplayOperationId();
         options.DefaultModelsExpandDepth(2);
         options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);

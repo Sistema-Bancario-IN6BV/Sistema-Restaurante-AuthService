@@ -5,6 +5,8 @@ using AuthService_GR.Persistence.Repositories;
 using AuthService_GR.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+
 
 namespace AuthService_GR.Api.Extensions;
 public static class ServiceCollectionExtensions
@@ -34,18 +36,18 @@ public static class ServiceCollectionExtensions
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
-            options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            options.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "AuthService API",
                 Version = "1.0.0",
                 Description = "API de autenticación y gestión de usuarios para KinalSports. Proporciona funcionalidades de registro, login, verificación de email, recuperación de contraseña y gestión de roles de usuarios.",
-                Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                Contact = new OpenApiContact
                 {
                     Name = "KinalSports Development Team",
                     Email = "support@kinalsports.com",
                     Url = new Uri("https://kinalsports.com")
                 },
-                License = new Microsoft.OpenApi.Models.OpenApiLicense
+                License = new OpenApiLicense
                 {
                     Name = "MIT",
                     Url = new Uri("https://opensource.org/licenses/MIT")
@@ -53,28 +55,29 @@ public static class ServiceCollectionExtensions
             });
 
             // Agregar soporte para parámetros de autorización Bearer Token
-            options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+                Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
                 BearerFormat = "JWT",
                 Description = "Ingresa un JWT Token válido para acceder a endpoints protegidos.\n\nFormato: Bearer {token}"
             });
 
-            options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
-                    new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                    new OpenApiSecurityScheme
                     {
-                        Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                        Reference = new OpenApiReference
                         {
-                            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                            Type = ReferenceType.SecurityScheme,
                             Id = "Bearer"
                         }
                     },
                     new string[] { }
                 }
             });
+
 
             // Incluir comentarios XML
             var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
