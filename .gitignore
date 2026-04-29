@@ -63,6 +63,7 @@ appsettings.Staging.json
 .env.*
 secrets.json
 **/secrets/
+**/keys/
 
 # =========================
 # Database files
