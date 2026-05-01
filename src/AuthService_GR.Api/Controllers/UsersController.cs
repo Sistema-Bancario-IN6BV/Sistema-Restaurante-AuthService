@@ -24,6 +24,38 @@ public class UsersController(IUserManagementService userManagementService) : Con
     }
 
     /// <summary>
+    /// Obtiene todos los usuarios del sistema (solo administradores).
+    /// </summary>
+    /// <returns>Lista completa de usuarios.</returns>
+    /// <remarks>
+    /// Ejemplo de solicitud:
+    ///
+    ///     GET /api/v1/users
+    ///     Authorization: Bearer {token}
+    /// </remarks>
+    /// <response code="200">Lista de usuarios obtenida exitosamente.</response>
+    /// <response code="401">El usuario no está autenticado.</response>
+    /// <response code="403">El usuario no tiene permisos de administrador.</response>
+    /// <response code="429">Demasiadas solicitudes. Intenta más tarde.</response>
+    [HttpGet]
+    [HttpGet("/api/v1/auth/users")]
+    [EnableRateLimiting("ApiPolicy")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<IReadOnlyList<UserResponseDto>>> GetAllUsers()
+    {
+        if (!await CurrentUserIsAdmin())
+        {
+            return StatusCode(403, new { success = false, message = "Forbidden" });
+        }
+
+        var users = await userManagementService.GetAllUsersAsync();
+        return Ok(users);
+    }
+
+    /// <summary>
     /// Actualiza el rol de un usuario específico (solo administradores).
     /// </summary>
     /// <param name="userId">ID del usuario cuyo rol será actualizado.</param>

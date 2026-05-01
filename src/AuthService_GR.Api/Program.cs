@@ -29,6 +29,8 @@ builder.Services.AddApiDocumentation();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddRateLimitingPolicies();
 
+builder.Services.AddSecurityPolicies(builder.Configuration);
+builder.Services.AddSecurityOptions();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -38,7 +40,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "AuthService API v1.0");
-        options.RoutePrefix = string.Empty; // Mostrar Swagger en raíz (/)
+        options.RoutePrefix = string.Empty;
         options.DisplayOperationId();
         options.DefaultModelsExpandDepth(2);
         options.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
@@ -49,6 +51,9 @@ if (app.Environment.IsDevelopment())
 
 // Add Serilog request logging
 app.UseSerilogRequestLogging();
+
+app.UseRouting();
+app.UseCors("DefaultCorsPolicy");
 
 // Add Security Headers using NetEscapades package
 app.UseSecurityHeaders(policies => policies
@@ -78,7 +83,6 @@ app.UseSecurityHeaders(policies => policies
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseHttpsRedirection();
-app.UseCors("DefaultCorsPolicy");
 app.UseRateLimiter();
 app.UseAuthentication();
 app.UseAuthorization();
