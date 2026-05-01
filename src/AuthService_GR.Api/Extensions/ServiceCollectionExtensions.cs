@@ -4,6 +4,7 @@ using AuthService_GR.Domain.Interfaces;
 using AuthService_GR.Persistence.Repositories;
 using AuthService_GR.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
@@ -60,7 +61,7 @@ public static class ServiceCollectionExtensions
                 Type = SecuritySchemeType.Http,
                 Scheme = "bearer",
                 BearerFormat = "JWT",
-                Description = "Ingresa un JWT Token válido para acceder a endpoints protegidos.\n\nFormato: Bearer {token}"
+                Description = "Ingresa un JWT Token válido para acceder a endpoints protegidos.\\n\\nFormato: Bearer {token}"
             });
 
             options.AddSecurityRequirement(new OpenApiSecurityRequirement
