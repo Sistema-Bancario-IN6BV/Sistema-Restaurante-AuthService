@@ -67,6 +67,26 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     /// <summary>
+    /// Actualiza el perfil del usuario autenticado.
+    /// </summary>
+    [HttpPut("profile")]
+    [Authorize]
+    [RequestSizeLimit(10 * 1024 * 1024)]
+    public async Task<ActionResult<object>> UpdateProfile([FromForm] UpdateProfileDto dto)
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "sub" || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+        if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
+        {
+            return Unauthorized();
+        }
+
+        var updated = await authService.UpdateProfileAsync(userIdClaim.Value, dto);
+        if (updated == null) return NotFound();
+
+        return Ok(new { success = true, message = "Perfil actualizado exitosamente", data = updated });
+    }
+
+    /// <summary>
     /// Registra un nuevo usuario en el sistema.
     /// </summary>
     /// <param name="registerDto">Datos requeridos para el registro (nombre, apellido, usuario, email, contraseña, teléfono, foto de perfil opcional).</param>
