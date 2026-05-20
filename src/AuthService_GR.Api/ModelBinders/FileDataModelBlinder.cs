@@ -18,6 +18,12 @@ public class FileDataModelBinder : IModelBinder
 
         var request = bindingContext.HttpContext.Request;
 
+        if (!request.HasFormContentType)
+        {
+            bindingContext.Result = ModelBindingResult.Success(null);
+            return Task.CompletedTask;
+        }
+
         var file = request.Form.Files.GetFile(bindingContext.FieldName);
         if(file != null && file.Length > 0)
         {

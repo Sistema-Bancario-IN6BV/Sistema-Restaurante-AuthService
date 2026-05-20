@@ -55,6 +55,25 @@ public class UsersController(IUserManagementService userManagementService) : Con
         return Ok(users);
     }
 
+    /// <response code="429">Demasiadas solicitudes. Intenta más tarde.</response>
+    [HttpPut("{userId}")]
+    [EnableRateLimiting("ApiPolicy")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<UserResponseDto>> UpdateUserProfile(string userId, [FromForm] UpdateUserProfileDto dto)
+    {
+        var currentUserId = User.Claims.FirstOrDefault(c => c.Type == "sub" || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
+        if (currentUserId != userId && !await CurrentUserIsAdmin())
+        {
+            return StatusCode(403, new { success = false, message = "No tienes permiso para actualizar este perfil." });
+        }
+
+        var result = await userManagementService.UpdateUserProfileAsync(userId, dto);
+        return Ok(result);
+    }
+
     /// <summary>
     /// Actualiza el rol de un usuario específico (solo administradores).
     /// </summary>

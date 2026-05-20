@@ -28,6 +28,49 @@ public class UserManagementService(IUserRepository users, IRoleRepository roles,
         }).ToList();
     }
 
+    public async Task<UserResponseDto> UpdateUserProfileAsync(string userId, UpdateUserProfileDto dto)
+    {
+        var user = await users.GetByIdAsync(userId);
+        if (user == null)
+            throw new KeyNotFoundException("User not found");
+
+        if (!string.IsNullOrWhiteSpace(dto.Name)) user.Name = dto.Name;
+        if (!string.IsNullOrWhiteSpace(dto.Surname)) user.Surname = dto.Surname;
+        if (!string.IsNullOrWhiteSpace(dto.Username)) user.Username = dto.Username;
+
+        if (user.UserProfile == null)
+        {
+            user.UserProfile = new UserProfile { UserId = userId };
+        }
+
+        if (!string.IsNullOrWhiteSpace(dto.Phone)) user.UserProfile.Phone = dto.Phone;
+
+        if (dto.ProfilePicture != null)
+        {
+            var fileName = $"profile-{userId}-{Guid.NewGuid()}";
+            var publicId = await cloudinary.UploadImageAsync(dto.ProfilePicture, fileName);
+            user.UserProfile.ProfilePicture = publicId;
+        }
+
+        await users.UpdateAsync(user);
+
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            Name = user.Name,
+            Surname = user.Surname,
+            Username = user.Username,
+            Email = user.Email,
+            ProfilePicture = cloudinary.GetFullImageUrl(user.UserProfile.ProfilePicture),
+            Phone = user.UserProfile.Phone,
+            Role = user.UserRoles.FirstOrDefault()?.Role?.Name ?? string.Empty,
+            Status = user.Status,
+            IsEmailVerified = user.UserEmail?.EmailVerified ?? false,
+            CreatedAt = user.CreatedAt,
+            UpdatedAt = user.UpdatedAt
+        };
+    }
+
     public async Task<UserResponseDto> UpdateUserRoleAsync(string userId, string roleName)
     {
         // Normalize

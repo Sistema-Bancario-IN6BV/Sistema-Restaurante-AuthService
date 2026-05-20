@@ -420,5 +420,47 @@ public class AuthService(
 
         return MapToUserResponseDto(user);
     }
+
+    public async Task<UserResponseDto?> UpdateProfileAsync(string userId, UpdateProfileDto dto)
+    {
+        var user = await userRepository.GetByIdAsync(userId);
+        if (user == null) return null;
+
+        if (!string.IsNullOrWhiteSpace(dto.Name)) user.Name = dto.Name!;
+        if (!string.IsNullOrWhiteSpace(dto.Surname)) user.Surname = dto.Surname!;
+        if (!string.IsNullOrWhiteSpace(dto.Username)) user.Username = dto.Username!;
+
+        if (!string.IsNullOrWhiteSpace(dto.Phone))
+        {
+            if (user.UserProfile == null) user.UserProfile = new Domain.Entities.UserProfile { UserId = user.Id, Id = UuidGenerator.GenerateUserId() };
+            user.UserProfile.Phone = dto.Phone!;
+        }
+
+        if (dto.ProfilePicture != null && dto.ProfilePicture.Size > 0)
+        {
+            var (isValid, errorMessage) = FileValidator.ValidateImage(dto.ProfilePicture);
+            if (!isValid)
+            {
+                logger.LogWarning("Invalid profile image: {Error}", errorMessage);
+                throw new InvalidOperationException(errorMessage);
+            }
+
+            try
+            {
+                var fileName = FileValidator.GenerateSecureFileName(dto.ProfilePicture.FileName);
+                var uploadedUrl = await _cloudinaryService.UploadImageAsync(dto.ProfilePicture, fileName);
+                if (user.UserProfile == null) user.UserProfile = new Domain.Entities.UserProfile { UserId = user.Id, Id = UuidGenerator.GenerateUserId() };
+                user.UserProfile.ProfilePicture = uploadedUrl;
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Failed to upload profile image for user {UserId}", userId);
+                throw;
+            }
+        }
+
+        var updated = await userRepository.UpdateAsync(user);
+        return MapToUserResponseDto(updated);
+    }
 }
 
