@@ -15,6 +15,7 @@ namespace AuthService_GR.Application.Services;
 public class AuthService(
     IUserRepository userRepository,
     IRoleRepository roleRepository,
+    IRefreshTokenRepository refreshTokenRepository,
     IPasswordHashService passwordHashService,
     IJwtTokenService jwtTokenService,
     ICloudinaryService cloudinaryService,
@@ -23,7 +24,7 @@ public class AuthService(
     ILogger<AuthService> logger) : IAuthService
 {
     private readonly ICloudinaryService _cloudinaryService = cloudinaryService;
-    public async Task<RegisterResponseDto> RegisterAsync(RegisterDto registerDto)
+    public async Task<RegisterResponseDto> RegisterAsync(RegisterDto registerDto, string? frontendBaseUrl = null)
     {
         // Verificar si el email ya existe
         if (await userRepository.ExistsByEmailAsync(registerDto.Email))
@@ -127,7 +128,7 @@ public class AuthService(
         {
             try
             {
-                await emailService.SendEmailVerificationAsync(createdUser.Email, createdUser.Username, emailVerificationToken);
+                await emailService.SendEmailVerificationAsync(createdUser.Email, createdUser.Username, emailVerificationToken, frontendBaseUrl);
                 logger.LogInformation("Verification email sent");
             }
             catch (Exception ex)
@@ -185,9 +186,10 @@ public class AuthService(
 
         logger.LogUserLoggedIn();
 
-        // Generar token JWT
+        // Generar token JWT + refresh token
         var token = jwtTokenService.GenerateToken(user);
         var expiryMinutes = int.Parse(configuration["JwtSettings:ExpiryInMinutes"] ?? "30");
+        var refreshToken = await CreateRefreshTokenAsync(user.Id);
 
         // Crear respuesta compacta
         return new AuthResponseDto
@@ -195,9 +197,76 @@ public class AuthService(
             Success = true,
             Message = "Login exitoso",
             Token = token,
+            RefreshToken = refreshToken.Token,
             UserDetails = MapToUserDetailsDto(user),
             ExpiresAt = DateTime.UtcNow.AddMinutes(expiryMinutes)
         };
+    }
+
+    public async Task<AuthResponseDto> RefreshTokenAsync(RefreshTokenRequestDto refreshTokenDto)
+    {
+        var existingToken = await refreshTokenRepository.GetByTokenAsync(refreshTokenDto.RefreshToken);
+
+        if (existingToken == null || !existingToken.IsActive)
+        {
+            throw new UnauthorizedAccessException("Invalid or expired refresh token");
+        }
+
+        var user = existingToken.User;
+
+        if (!user.Status)
+        {
+            throw new UnauthorizedAccessException("User account is disabled");
+        }
+
+        // Rotación: revocar el token usado y emitir uno nuevo
+        var newRefreshToken = await CreateRefreshTokenAsync(user.Id);
+        existingToken.RevokedAt = DateTime.UtcNow;
+        existingToken.ReplacedByToken = newRefreshToken.Token;
+        await refreshTokenRepository.UpdateAsync(existingToken);
+
+        var token = jwtTokenService.GenerateToken(user);
+        var expiryMinutes = int.Parse(configuration["JwtSettings:ExpiryInMinutes"] ?? "30");
+
+        logger.LogInformation("Access token refreshed for user {UserId}", user.Id);
+
+        return new AuthResponseDto
+        {
+            Success = true,
+            Message = "Token renovado exitosamente",
+            Token = token,
+            RefreshToken = newRefreshToken.Token,
+            UserDetails = MapToUserDetailsDto(user),
+            ExpiresAt = DateTime.UtcNow.AddMinutes(expiryMinutes)
+        };
+    }
+
+    public async Task RevokeRefreshTokenAsync(string refreshToken)
+    {
+        var existingToken = await refreshTokenRepository.GetByTokenAsync(refreshToken);
+        if (existingToken == null || existingToken.RevokedAt != null)
+        {
+            return;
+        }
+
+        existingToken.RevokedAt = DateTime.UtcNow;
+        await refreshTokenRepository.UpdateAsync(existingToken);
+    }
+
+    private async Task<RefreshToken> CreateRefreshTokenAsync(string userId)
+    {
+        var refreshTokenExpiryDays = int.Parse(configuration["JwtSettings:RefreshTokenExpiryDays"] ?? "30");
+
+        var refreshToken = new RefreshToken
+        {
+            Id = UuidGenerator.GenerateRefreshTokenId(),
+            UserId = userId,
+            Token = jwtTokenService.GenerateRefreshToken(),
+            ExpiresAt = DateTime.UtcNow.AddDays(refreshTokenExpiryDays),
+            CreatedAt = DateTime.UtcNow
+        };
+
+        return await refreshTokenRepository.CreateAsync(refreshToken);
     }
 
     private UserResponseDto MapToUserResponseDto(User user)
@@ -274,7 +343,7 @@ public class AuthService(
         };
     }
 
-    public async Task<EmailResponseDto> ResendVerificationEmailAsync(ResendVerificationDto resendDto)
+    public async Task<EmailResponseDto> ResendVerificationEmailAsync(ResendVerificationDto resendDto, string? frontendBaseUrl = null)
     {
         var user = await userRepository.GetByEmailAsync(resendDto.Email);
         if (user == null || user.UserEmail == null)
@@ -307,7 +376,7 @@ public class AuthService(
         // Enviar email
         try
         {
-            await emailService.SendEmailVerificationAsync(user.Email, user.Username, newToken);
+            await emailService.SendEmailVerificationAsync(user.Email, user.Username, newToken, frontendBaseUrl);
             return new EmailResponseDto
             {
                 Success = true,
@@ -327,7 +396,7 @@ public class AuthService(
         }
     }
 
-    public async Task<EmailResponseDto> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto)
+    public async Task<EmailResponseDto> ForgotPasswordAsync(ForgotPasswordDto forgotPasswordDto, string? frontendBaseUrl = null)
     {
         var user = await userRepository.GetByEmailAsync(forgotPasswordDto.Email);
         if (user == null)
@@ -346,25 +415,27 @@ public class AuthService(
 
         if (user.UserPasswordReset == null)
         {
-            user.UserPasswordReset = new UserPasswordReset
+            // INSERT explícito: agregar el dependiente nuevo a un principal ya rastreado
+            // por navegación haría que EF lo trate como Modified (UPDATE de 0 filas).
+            await userRepository.AddPasswordResetAsync(new UserPasswordReset
             {
+                Id = UuidGenerator.GenerateUserId(),
                 UserId = user.Id,
                 PasswordResetToken = resetToken,
                 PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1)
-            };
+            });
         }
         else
         {
             user.UserPasswordReset.PasswordResetToken = resetToken;
             user.UserPasswordReset.PasswordResetTokenExpiry = DateTime.UtcNow.AddHours(1); // 1 hora para resetear
+            await userRepository.UpdateAsync(user);
         }
-
-        await userRepository.UpdateAsync(user);
 
         // Enviar email
         try
         {
-            await emailService.SendPasswordResetAsync(user.Email, user.Username, resetToken);
+            await emailService.SendPasswordResetAsync(user.Email, user.Username, resetToken, frontendBaseUrl);
             logger.LogInformation("Password reset email sent to {Email}", user.Email);
         }
         catch (Exception ex)
@@ -461,6 +532,18 @@ public class AuthService(
 
         var updated = await userRepository.UpdateAsync(user);
         return MapToUserResponseDto(updated);
+    }
+
+    public async Task<bool> DeactivateAccountAsync(string userId)
+    {
+        var user = await userRepository.GetByIdAsync(userId);
+        if (user == null) return false;
+
+        user.Status = false;
+        await userRepository.UpdateAsync(user);
+
+        logger.LogInformation("Account deactivated for user {Username}", user.Username);
+        return true;
     }
 }
 

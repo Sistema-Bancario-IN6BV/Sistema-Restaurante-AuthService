@@ -15,6 +15,23 @@ namespace AuthService_GR.Api.Controllers;
 [Route("api/v1/[controller]")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
+    private string? GetFrontendBaseUrl()
+    {
+        var origin = Request.Headers.Origin.FirstOrDefault();
+        if (!string.IsNullOrWhiteSpace(origin))
+        {
+            return origin;
+        }
+
+        var referer = Request.Headers.Referer.FirstOrDefault();
+        if (Uri.TryCreate(referer, UriKind.Absolute, out var refererUri))
+        {
+            return refererUri.GetLeftPart(UriPartial.Authority);
+        }
+
+        return null;
+    }
+
     /// <summary>
     /// Obtiene el perfil del usuario autenticado actual.
     /// </summary>
@@ -87,6 +104,25 @@ public class AuthController(IAuthService authService) : ControllerBase
     }
 
     /// <summary>
+    /// Desactiva (soft-delete) la cuenta del usuario autenticado.
+    /// </summary>
+    [HttpDelete("profile")]
+    [Authorize]
+    public async Task<ActionResult<object>> DeleteAccount()
+    {
+        var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "sub" || c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
+        if (userIdClaim == null || string.IsNullOrEmpty(userIdClaim.Value))
+        {
+            return Unauthorized();
+        }
+
+        var success = await authService.DeactivateAccountAsync(userIdClaim.Value);
+        if (!success) return NotFound();
+
+        return Ok(new { success = true, message = "Cuenta desactivada exitosamente" });
+    }
+
+    /// <summary>
     /// Registra un nuevo usuario en el sistema.
     /// </summary>
     /// <param name="registerDto">Datos requeridos para el registro (nombre, apellido, usuario, email, contraseña, teléfono, foto de perfil opcional).</param>
@@ -140,7 +176,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<RegisterResponseDto>> Register([FromForm] RegisterDto registerDto)
     {
-        var result = await authService.RegisterAsync(registerDto);
+        var result = await authService.RegisterAsync(registerDto, GetFrontendBaseUrl());
         return StatusCode(201, result);
     }
 
@@ -189,6 +225,50 @@ public class AuthController(IAuthService authService) : ControllerBase
     {
         var result = await authService.LoginAsync(loginDto);
         return Ok(result);
+    }
+
+    /// <summary>
+    /// Renueva el token de acceso usando un refresh token válido (rotación: el refresh
+    /// token usado queda revocado y se emite uno nuevo).
+    /// </summary>
+    /// <param name="refreshTokenDto">Refresh token emitido previamente por /login o /refresh.</param>
+    /// <returns>Nuevo JWT de acceso y nuevo refresh token.</returns>
+    /// <remarks>
+    /// Ejemplo de solicitud:
+    ///
+    ///     POST /api/v1/auth/refresh
+    ///     Content-Type: application/json
+    ///
+    ///     {
+    ///       "refreshToken": "previously-issued-refresh-token"
+    ///     }
+    /// </remarks>
+    /// <response code="200">Token renovado exitosamente.</response>
+    /// <response code="401">Refresh token inválido, expirado o revocado.</response>
+    /// <response code="429">Demasiados intentos. Intenta más tarde.</response>
+    [HttpPost("refresh")]
+    [EnableRateLimiting("AuthPolicy")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    public async Task<ActionResult<AuthResponseDto>> Refresh([FromBody] RefreshTokenRequestDto refreshTokenDto)
+    {
+        var result = await authService.RefreshTokenAsync(refreshTokenDto);
+        return Ok(result);
+    }
+
+    /// <summary>
+    /// Revoca un refresh token (logout). Siempre responde con éxito, incluso si el
+    /// token ya no existe o ya estaba revocado.
+    /// </summary>
+    /// <param name="refreshTokenDto">Refresh token a revocar.</param>
+    [HttpPost("logout")]
+    [EnableRateLimiting("ApiPolicy")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<IActionResult> Logout([FromBody] RefreshTokenRequestDto refreshTokenDto)
+    {
+        await authService.RevokeRefreshTokenAsync(refreshTokenDto.RefreshToken);
+        return Ok(new { success = true, message = "Sesión cerrada exitosamente" });
     }
 
     /// <summary>
@@ -267,7 +347,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<EmailResponseDto>> ResendVerification([FromBody] ResendVerificationDto resendDto)
     {
-        var result = await authService.ResendVerificationEmailAsync(resendDto);
+        var result = await authService.ResendVerificationEmailAsync(resendDto, GetFrontendBaseUrl());
 
         if (!result.Success)
         {
@@ -321,7 +401,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<EmailResponseDto>> ForgotPassword([FromBody] ForgotPasswordDto forgotPasswordDto)
     {
-        var result = await authService.ForgotPasswordAsync(forgotPasswordDto);
+        var result = await authService.ForgotPasswordAsync(forgotPasswordDto, GetFrontendBaseUrl());
 
         if (!result.Success)
         {
