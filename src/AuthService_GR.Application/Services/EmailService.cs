@@ -9,10 +9,10 @@ namespace AuthService_GR.Application.Services;
 
 public class EmailService(IConfiguration configuration, ILogger<EmailService> logger) : IEmailService
 {
-    public async Task SendEmailVerificationAsync(string email, string username, string token)
+    public async Task SendEmailVerificationAsync(string email, string username, string token, string? frontendBaseUrl = null)
     {
         var subject = "Verify your email address";
-        var verificationUrl = $"{configuration["AppSettings:FrontendUrl"]}/verify-email?token={token}";
+        var verificationUrl = BuildFrontendUrl(frontendBaseUrl, "verify-email", token);
 
         var body = $@"
             <h2>Welcome {username}!</h2>
@@ -29,10 +29,10 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
         await SendEmailAsync(email, subject, body);
     }
 
-    public async Task SendPasswordResetAsync(string email, string username, string token)
+    public async Task SendPasswordResetAsync(string email, string username, string token, string? frontendBaseUrl = null)
     {
         var subject = "Reset your password";
-        var resetUrl = $"{configuration["AppSettings:FrontendUrl"]}/reset-password?token={token}";
+        var resetUrl = BuildFrontendUrl(frontendBaseUrl, "reset-password", token);
 
         var body = $@"
             <h2>Password Reset Request</h2>
@@ -165,6 +165,29 @@ public class EmailService(IConfiguration configuration, ILogger<EmailService> lo
 
             throw new InvalidOperationException($"Failed to send email: {ex.Message}", ex);
         }
+    }
+
+    private string BuildFrontendUrl(string? frontendBaseUrl, string path, string token)
+    {
+        var baseUrl = ResolveFrontendBaseUrl(frontendBaseUrl);
+        return $"{baseUrl}/{path}?token={token}";
+    }
+
+    private string ResolveFrontendBaseUrl(string? frontendBaseUrl)
+    {
+        var baseUrl = frontendBaseUrl;
+
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            baseUrl = configuration["AppSettings:FrontendUrl"];
+        }
+
+        if (string.IsNullOrWhiteSpace(baseUrl))
+        {
+            throw new InvalidOperationException("Frontend URL is not configured");
+        }
+
+        return baseUrl.TrimEnd('/');
     }
 }
 
