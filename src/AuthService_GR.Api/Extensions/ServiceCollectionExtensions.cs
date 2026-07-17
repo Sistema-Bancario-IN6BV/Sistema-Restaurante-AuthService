@@ -20,6 +20,7 @@ public static class ServiceCollectionExtensions
                 .UseSnakeCaseNamingConvention());
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUserManagementService, UserManagementService>();
         services.AddScoped<IPasswordHashService, PasswordHashService>();

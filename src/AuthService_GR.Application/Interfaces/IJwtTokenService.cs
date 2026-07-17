@@ -5,4 +5,5 @@ namespace AuthService_GR.Application.Interfaces;
 public interface IJwtTokenService
 {
     string GenerateToken (User user);
+    string GenerateRefreshToken();
 }

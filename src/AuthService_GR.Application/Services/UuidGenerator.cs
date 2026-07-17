@@ -29,6 +29,10 @@ public static class UuidGenerator
     {
         return $"rol_{GenerateShortUUID()}";
     }
+    public static string GenerateRefreshTokenId()
+    {
+        return $"rft_{GenerateShortUUID()}";
+    }
 
 
     public static bool IsValidUserId(string? id)
