@@ -15,6 +15,7 @@ public interface IUserRepository
     Task<bool> ExistsByEmailAsync (string email);
     Task<bool> ExistsByUsernameAsync (string username);
     Task<User> UpdateAsync (User user);
+    Task AddPasswordResetAsync (UserPasswordReset reset);
     Task<bool> DeleteAsync (string id);
     Task UpdateUserRoleAsync (string userId, string roleId);
 }
