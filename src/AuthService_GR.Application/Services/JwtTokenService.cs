@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 namespace AuthService_GR.Application.Services;
 
@@ -40,5 +41,14 @@ public class JwtTokenService(IConfiguration configuration) : IJwtTokenService
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        var bytes = RandomNumberGenerator.GetBytes(64);
+        return Convert.ToBase64String(bytes)
+            .Replace("+", "-")
+            .Replace("/", "_")
+            .Replace("=", "");
     }
 }
