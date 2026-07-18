@@ -14,6 +14,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<UserEmail> UserEmails { get; set; }
     public DbSet<UserPasswordReset> userPasswordResets { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -174,6 +175,28 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
                 .HasMaxLength(16);
             entity.Property(e => e.PasswordResetToken)
                 .HasMaxLength(256);
+        });
+
+        modelBuilder.Entity<RefreshToken>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id)
+                .HasMaxLength(16)
+                .ValueGeneratedOnAdd();
+            entity.Property(e => e.UserId)
+                .HasMaxLength(16);
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(256);
+            entity.Property(e => e.ExpiresAt)
+                .IsRequired();
+            entity.Property(e => e.CreatedAt)
+                .IsRequired();
+            entity.HasIndex(e => e.Token)
+                .IsUnique();
+            entity.HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.UserId);
         });
     }
 

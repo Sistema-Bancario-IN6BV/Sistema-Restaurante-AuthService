@@ -34,6 +34,12 @@ public class AuthResponseDto
     public string Token {get; set; } = string.Empty;
 
     /// <summary>
+    /// Token de refresco de larga duración, usado para obtener un nuevo Token sin
+    /// volver a pedir credenciales. Debe enviarse al endpoint /auth/refresh.
+    /// </summary>
+    public string RefreshToken {get; set; } = string.Empty;
+
+    /// <summary>
     /// Detalles del usuario autenticado.
     /// </summary>
     public UserDetailsDto UserDetails {get; set;} = new();

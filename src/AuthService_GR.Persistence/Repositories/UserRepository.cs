@@ -87,6 +87,12 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         return await GetByIdAsync(user.Id);
     }
 
+    public async Task AddPasswordResetAsync(UserPasswordReset reset)
+    {
+        context.userPasswordResets.Add(reset);
+        await context.SaveChangesAsync();
+    }
+
     public async Task<bool> DeleteAsync(string id)
     {
         var user = await GetByIdAsync(id);
