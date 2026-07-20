@@ -57,9 +57,10 @@ public class AuthService(
                 var fileName = FileValidator.GenerateSecureFileName(registerDto.ProfilePicture.FileName);
                 profilePicturePath = await _cloudinaryService.UploadImageAsync(registerDto.ProfilePicture, fileName);
             }
-            catch (Exception)
+           catch (Exception ex)
             {
                 logger.LogImageUploadError();
+                logger.LogError(ex, "DEBUG - Cloudinary real error: {Message}", ex.Message);
                 throw new BusinessException(ErrorCodes.IMAGE_UPLOAD_FAILED, "Failed to upload profile image");
             }
         }
